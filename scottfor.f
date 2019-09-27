@@ -22,12 +22,14 @@ C
        CHARACTER(70) RAW_ITEM, ITEM_NAME
        CHARACTER(80) RM_BUF(3)
        CHARACTER(100) MSG_BUF(8)
+       CHARACTER(6) O, V
        CHARACTER(6) NOUNS(90)
        CHARACTER(6) VERBS(90)
        CHARACTER(80) RS(40)
 C   ALLOCATE SPACE FOR SHORT MESSAGE STRINGS FOR NOW
        CHARACTER(100) MS(100)
        CHARACTER(70) IAS(105)
+       CHARACTER(30) COMMENTS(280)
 
 C   TRACE/DEBUGGING FLAGS
        PRINT_HEADER = 1
@@ -301,6 +303,50 @@ C   DISPLAY ITEMS
            PRINT 750, 'ITEM #', I, IAS(I), IA(I)
 760      CONTINUE
        ENDIF
+
+C    READ COMMENTS
+
+810    FORMAT (A)
+       DO 800 I=1, CL+1
+         READ (2, 810) COMMENTS(I)
+800    CONTINUE
+
+C PRINT ACTIONS AFTER READING VOCAB WORDS AND COMMENTS
+
+920    FORMAT (A, I3, A, A, A, A, A, A, A)
+922    FORMAT (A, I3, A, I3, A, A)
+
+       IF (PPRINT_ACTIONS .NE. 1) THEN
+         DO 900 I=1, CL+1
+           VERB = C(I, 1) / 150
+           NOUN = C(I, 1) - 150 * VERB
+           IF (VERB .EQ. 0) THEN
+             PRINT 922,'[',I,']  AUTO ', NOUN,'%    ', COMMENTS(I)
+           ELSE
+             V = VERBS(VERB+1)
+             O = NOUNS(NOUN+1)
+             PRINT 920,'[',I,']  VERB ',V,' NOUN ',O,' ',COMMENTS(I)
+           ENDIF
+
+           DO 930 J=1, 5
+             LL(J) = C(I,J+1) / 20
+             W(J) = C(I, J+1) - 20 * LL(J)
+930        CONTINUE
+           DO 940 J=1, 5
+             CALL TEST_PRINT(W(J), LL(J))
+940        CONTINUE
+
+           DO 950 J=0, 1
+             AC(J*2+1) = C(I, J+7) / 150
+             AC(J*2+2) = C(I, J+7) - 150 * AC(J*2+1)
+950        CONTINUE
+           DO 960 J=1, 4
+             CALL ACTION_PRINT(AC(J))
+960        CONTINUE
+
+900    CONTINUE
+       ENDIF
+
        END
 
 CCCCCCC
