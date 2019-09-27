@@ -325,7 +325,7 @@ C PRINT ACTIONS AFTER READING VOCAB WORDS AND COMMENTS
            ELSE
              V = VERBS(VERB+1)
              O = NOUNS(NOUN+1)
-             PRINT 920,'[',I,']  VERB ',V,' NOUN ',O,' ',COMMENTS(I)
+             PRINT 920,'[',I,']  VERB ',V,' NOUN ',O,'    ',COMMENTS(I)
            ENDIF
 
            DO 930 J=1, 5
@@ -346,6 +346,16 @@ C PRINT ACTIONS AFTER READING VOCAB WORDS AND COMMENTS
 
 900    CONTINUE
        ENDIF
+
+C    READ TRAILER AND DISPLAY VERSION
+
+1000   FORMAT (A)
+       READ (2, 1000) RM_BUF(1) 
+       READ (2, 1000) RM_BUF(2) 
+       READ (2, 1000) RM_BUF(3)
+       PRINT 1000, RM_BUF(1) 
+       PRINT 1000, RM_BUF(2) 
+       PRINT 1000, RM_BUF(3) 
 
        END
 
