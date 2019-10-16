@@ -226,6 +226,7 @@ C PRINT ACTIONS AFTER READING VOCAB WORDS
            IF (VERB .EQ. 0) THEN
              PRINT 230,'[',I,']  AUTO ', NOUN,'%'
            ELSE
+             VERB = VERB + 1
              NOUN = NOUN + 1
              PRINT 520,'[',I,']  VERB ',VERBS(VERB),' NOUN ',NOUNS(NOUN)
            ENDIF
